@@ -46,8 +46,10 @@ trait GetReserves
 
     public function endedReserves(): MorphMany
     {
-        return $this->reserves()->whereDate('end_reserve_date', '<', now())->orWhere(function ($query) {
-            $query->whereDate('end_reserve_date', '=', now())->whereTime('end_reserve_time', '<=', now());
+        return $this->reserves()->where(function ($q) {
+            $q->whereDate('end_reserve_date', '<', now())->orWhere(function ($query) {
+                $query->whereDate('end_reserve_date', '=', now())->whereTime('end_reserve_time', '<=', now());
+            });
         })->with(['customer', 'reservable']);
     }
 
